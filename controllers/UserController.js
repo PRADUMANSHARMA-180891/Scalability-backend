@@ -1,75 +1,115 @@
 const User = require('../models/UserModels');
-
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const multer = require('multer');
+const path = require('path')
 // Login for user
 const UserLogin = async (req, res) => {
   try {
-    const {
-      name,
-      email,
-      password,
-      username,
-      user_photo,
-      phone_number,
-      p_isd,
-      whatsapp_no,
-      w_isd,
-      otp,
-      position,
-      is_login,
-      is_verified,
-      company_id,
-      departments_id,
-      status,
-      remember_token
-    } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required" });
-    }
-
-    const postLoginData = await User.create({
-      name,
-      email,
-      password,
-      username,
-      user_photo,
-      phone_number,
-      p_isd,
-      whatsapp_no,
-      w_isd,
-      otp,
-      position,
-      is_login,
-      is_verified,
-      company_id,
-      departments_id,
-      status,
-      remember_token
+    // const { error } = await User.LoginUser(req.body);
+    // if (error) {
+    //     return res.status(400).json({ message: false, errorMessage: error.details });
+    // }
+    const findUser = await User.findOne({
+        where: {
+            email: req.body.email,
+        },
     });
-
-    if (!postLoginData) {
-      return res.status(500).json({ message: "Something went wrong while creating user" });
+    if (findUser) {
+        const isPassword = await bcrypt.compare(req.body.user_password, findUser.user_password);
+        if (!isPassword) {
+            return res.status(400).json({
+                message: false,
+                errorMessage: "Invalid email and password"
+            })
+        }
+        const token = await User.generateToken({ id: findUser.id, name: "abc", email: findUser.email, company_id: 17 });
+        // await User.update({ remember_token: token }, {
+        //     where: {
+        //         id: findUser.id
+        //     }
+        // })
+        return res.status(200).json({ status: true, message: "Login  successfully", token: token, user: findUser });
+    } else {
+        return res.status(400).json({ status: false, errorMessage: "user does not exist" });
     }
-
-    res.status(201).json(postLoginData);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong while posting data", error });
-  }
+} catch (error) {
+    return res.status(404).json(error);
+}
 };
 
 // Get user data
 const GetUserData = async (req, res) => {
   try {
-    const getUser = await User.findAll({
-        attributes: ['name','email',"password","username","user_photo","phone_number"]
+    const id = req.user.id; // Get userId from decoded token
+    console.log(id)
+    const user = await User.findByPk(id, {
+      attributes: ['name', 'email', 'user_photo', 'phone_number', 'x', 'facebook', 'linkedin', 'user_roles'],
     });
-    if (!getUser) {
-      return res.status(404).json({ message: "No user data found" });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json(getUser);
+
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong while getting user data", error });
+    res.status(500).json({ message: 'Something went wrong while fetching user data', error });
+  }
+};
+//multer
+// Configure Multer storage options
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Adding a timestamp to the file name to make it unique
+  },
+});
+
+// File filter to allow only image files
+const fileFilter = (req, file, cb) => {
+  const filetypes = /jpeg|jpg|png|gif/;
+  const mimetype = filetypes.test(file.mimetype);
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Only image files are allowed'));
   }
 };
 
-module.exports = { UserLogin, GetUserData };
+// Initialize multer with the storage and file filter settings
+const upload = multer({ 
+  storage: storage, 
+  fileFilter: fileFilter 
+});
+
+// Your updateUser controller function
+const updateUser = async (req, res) => {
+  const { Id } = req.params;
+  const updatedData = req.body;
+
+  try {
+    console.log(`Received userId: ${Id}`); // Debug log
+    const user = await User.findByPk(Id);
+
+    if (!user) {
+      console.log(`User with id ${Id} not found`); // Debug log
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (req.file) {
+      updatedData.user_photo = req.file.path; // Save the file path in the database
+    }
+
+    await user.update(updatedData);
+
+    res.status(200).json({ message: 'User updated successfully', user });
+  } catch (error) {
+    console.error('Error updating user:', error); // Debug log
+    res.status(500).json({ message: 'Error updating user', error });
+  }
+};
+module.exports = { UserLogin, GetUserData, updateUser,upload };

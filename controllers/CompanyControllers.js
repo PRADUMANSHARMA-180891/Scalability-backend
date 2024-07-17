@@ -36,7 +36,7 @@ const getCompanyData = async (req, res) => {
         return res.status(404).json({ message: "No company data found" });
       }
   
-      res.status(200).json(companyData);
+     return res.status(200).json(companyData);
     } catch (error) {
       res.status(500).json({ message: "Something went wrong while getting data", error: error.message });
     }
