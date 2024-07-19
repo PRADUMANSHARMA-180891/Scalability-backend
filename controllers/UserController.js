@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const path = require('path')
+const { Op } = require('sequelize');
 // Login for user
 const UserLogin = async (req, res) => {
   try {
@@ -112,4 +113,45 @@ const updateUser = async (req, res) => {
     res.status(500).json({ message: 'Error updating user', error });
   }
 };
-module.exports = { UserLogin, GetUserData, updateUser,upload };
+// Search users by name
+const SearchUsersByName = async (req, res) => {
+  try {
+    const { name } = req.query;
+    if (!name) {
+      return res.status(400).json({ message: 'Name query parameter is required' });
+    }
+
+    const users = await User.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${name}%`, // Use the Op.like operator for partial matching
+        },
+      },
+    });
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong while searching for users', error });
+  }
+};
+
+// get singal user
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error fetching user by ID:', error);
+    res.status(500).json({ message: 'Something went wrong while fetching user data', error });
+  }
+};
+
+module.exports = { UserLogin, GetUserData, updateUser,upload, SearchUsersByName,getUserById };

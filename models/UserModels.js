@@ -2,7 +2,8 @@ const sequelize = require('../Config/DBs');
 const Datatypes = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const Joi = require("joi")
+const Joi = require("joi");
+
 const User = sequelize.define(
     'User',
     {
@@ -10,21 +11,16 @@ const User = sequelize.define(
             type: Datatypes.STRING,
             allowNull: true,
         },
-        username: {
-            type: Datatypes.STRING,
-            allowNull: true,
-        },
         email: {
             type: Datatypes.STRING,
             allowNull: true,
-            
         },
         user_password: {
             type: Datatypes.STRING,
             allowNull: true,
         },
         user_photo: {
-            type: Datatypes.STRING,
+            type: Datatypes.TEXT,
             allowNull: true,
         },
         phone_number: {
@@ -75,11 +71,38 @@ const User = sequelize.define(
             type: Datatypes.TEXT,
             allowNull: true,
         },
-        user_roles:{
+        user_roles: {
             type: Datatypes.ENUM,
             values: ['administration', 'growth champion', 'decision maker'],
-            // defaultValue:"administration"
-        }
+        },
+        department: {
+            type: Datatypes.STRING,
+            allowNull: true,
+        },
+        notes: {
+            type: Datatypes.TEXT,
+            allowNull: true,
+        },
+        twitter_url: {
+            type: Datatypes.STRING,
+            allowNull: true,
+        },
+        linkedin_url: {
+            type: Datatypes.STRING,
+            allowNull: true,
+        },
+        date_of_birth: {
+            type: Datatypes.DATEONLY,
+            allowNull: true,
+        },
+        hire_date: {
+            type: Datatypes.DATEONLY,
+            allowNull: true,
+        },
+        hobbies: {
+            type: Datatypes.STRING,
+            allowNull: true,
+        },
     },
     {
         tableName: 'users',
@@ -93,12 +116,12 @@ User.beforeCreate(async function (user) {
     if (user.changed('user_password')) {
         const salt = await bcrypt.genSalt(10);
         user.user_password = await bcrypt.hash(user.user_password, 10);
-        console.log(user.user_password)
+        console.log(user.user_password);
     }
 });
 
-User.generateToken = function ({ id, name, email,company_id }) {
-    const token = jwt.sign({ id, name, email,company_id }, "econstra", { expiresIn: '1h' });
+User.generateToken = function ({ id, name, email, company_id }) {
+    const token = jwt.sign({ id, name, email, company_id }, "econstra", { expiresIn: '1h' });
     return token;
 };
 
@@ -109,7 +132,7 @@ User.LoginUser = (user) => {
         }),
         user_password: Joi.string().required(),
     });
-    return userSchema.validateAsync(user, { abortEarly: false, errors: { label: 'key', wrap: { label: false } } })
-}
+    return userSchema.validateAsync(user, { abortEarly: false, errors: { label: 'key', wrap: { label: false } } });
+};
 
-module.exports = User; 
+module.exports = User;
