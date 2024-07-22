@@ -45,7 +45,7 @@ const GetUserData = async (req, res) => {
     const id = req.user.id; // Get userId from decoded token
     console.log(id)
     const user = await User.findByPk(id, {
-      attributes: ['name', 'email', 'user_photo', 'phone_number', 'x', 'facebook', 'linkedin', 'user_roles'],
+      attributes: ['name', 'email', 'user_photo', 'phone_number', 'x', 'facebook', 'linkedin', 'user_roles','D','I','S','C','D2','I2','S2','C2'],
     });
 
     if (!user) {

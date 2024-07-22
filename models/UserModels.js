@@ -103,6 +103,38 @@ const User = sequelize.define(
             type: Datatypes.STRING,
             allowNull: true,
         },
+        D :{
+            type : Datatypes.INTEGER,
+            allowNull: true
+        },
+        I :{
+            type : Datatypes.INTEGER,
+            allowNull:true
+        },
+        S :{
+            type :Datatypes.INTEGER,
+            allowNull: true
+        },
+        C: {
+            type : Datatypes.INTEGER,
+            allowNull:true
+        },
+        D2:{
+            type : Datatypes.INTEGER,
+            allowNull:true 
+        },
+        I2:{
+            type : Datatypes.INTEGER,
+            allowNull:true
+        },
+        S2:{
+            type : Datatypes.INTEGER,
+            allowNull:true
+        },
+        C2:{
+            type : Datatypes.INTEGER,
+            allowNull:true
+        }
     },
     {
         tableName: 'users',
