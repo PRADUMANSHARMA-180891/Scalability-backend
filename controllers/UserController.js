@@ -1,6 +1,6 @@
 const User = require('../models/UserModels');
 const bcrypt = require('bcrypt');
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const path = require('path')
 const { Op } = require('sequelize');
@@ -87,32 +87,46 @@ const upload = multer({
   fileFilter: fileFilter 
 });
 
-// Your updateUser controller function
+// updateUser controller function
+// const bcrypt = require('bcrypt');
+
 const updateUser = async (req, res) => {
   const { Id } = req.params;
   const updatedData = req.body;
 
   try {
-    console.log(`Received userId: ${Id}`); // Debug log
+    console.log(`Received userId: ${Id}`);
     const user = await User.findByPk(Id);
-
+    
     if (!user) {
-      console.log(`User with id ${Id} not found`); // Debug log
+      console.log(`User with id ${Id} not found`);
       return res.status(404).json({ message: 'User not found' });
     }
 
     if (req.file) {
-      updatedData.user_photo = req.file.path; // Save the file path in the database
+      updatedData.user_photo = req.file.path;
+    }
+
+    if (updatedData.newPassword && updatedData.confirmPassword) {
+      if (updatedData.newPassword !== updatedData.confirmPassword) {
+        return res.status(400).json({ message: 'Passwords do not match' });
+      } else {
+        const hashPassword = await bcrypt.hash(updatedData.newPassword, 10);
+        updatedData.user_password = hashPassword;
+      }
+      delete updatedData.newPassword;
+      delete updatedData.confirmPassword;
     }
 
     await user.update(updatedData);
 
     res.status(200).json({ message: 'User updated successfully', user });
   } catch (error) {
-    console.error('Error updating user:', error); // Debug log
+    console.error('Error updating user:', error);
     res.status(500).json({ message: 'Error updating user', error });
   }
 };
+
 // Search users by name
 const SearchUsersByName = async (req, res) => {
   try {

@@ -134,7 +134,35 @@ const User = sequelize.define(
         C2:{
             type : Datatypes.INTEGER,
             allowNull:true
-        }
+        },
+        assignTaskAlert: {
+            type: Datatypes.BOOLEAN,
+            defaultValue: false,
+          },
+          taskDueTodayAlert: {
+            type: Datatypes.BOOLEAN,
+            defaultValue: false,
+          },
+          changeDueDateAlert: {
+            type: Datatypes.BOOLEAN,
+            defaultValue: false,
+          },
+          completeTaskAlert: {
+            type: Datatypes.BOOLEAN,
+            defaultValue: false,
+          },
+          stuckAlert: {
+            type: Datatypes.BOOLEAN,
+            defaultValue: false,
+          },
+          unstuckAlert: {
+            type: Datatypes.BOOLEAN,
+            defaultValue: false,
+          },
+          weeklyAlert: {
+            type: Datatypes.BOOLEAN,
+            defaultValue: false,
+          }
     },
     {
         tableName: 'users',
