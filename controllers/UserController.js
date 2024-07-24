@@ -7,10 +7,6 @@ const { Op } = require('sequelize');
 // Login for user
 const UserLogin = async (req, res) => {
   try {
-    // const { error } = await User.LoginUser(req.body);
-    // if (error) {
-    //     return res.status(400).json({ message: false, errorMessage: error.details });
-    // }
     const findUser = await User.findOne({
         where: {
             email: req.body.email,

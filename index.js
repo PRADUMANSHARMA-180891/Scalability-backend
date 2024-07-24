@@ -10,15 +10,20 @@ const sequelize = require('./Config/DBs.js');
 const UserRoutes = require('./routes/UserRoutes');
 // company uls
 const CompanyRoutes = require("./routes/CompanyRoutes");
-sequelize.sync({alter: true}).then(() => {
-  console.log('database connected successfully');
-}).catch((error) => {
-  console.error('Unable to connect to the database: ', error);
-});
+// Announcement uls
+const createAnnouncementRoutes =require("./routes/createAnnouncementRoutes");
+// const createAnnouncement = require('./controllers/createAnnouncementController.js');
+// sequelize.sync({alter: true}).then(() => {
+//   console.log('database connected successfully');
+// }).catch((error) => {
+//   console.error('Unable to connect to the database: ', error);
+// });
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
 app.use('/company', CompanyRoutes)
+// announcement
+app.use('/announcement', createAnnouncementRoutes)
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

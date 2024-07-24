@@ -3,6 +3,7 @@ const Datatypes = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
+// const Announcement = require('./createAnnouncementModels');
 
 const User = sequelize.define(
     'User',
@@ -194,5 +195,6 @@ User.LoginUser = (user) => {
     });
     return userSchema.validateAsync(user, { abortEarly: false, errors: { label: 'key', wrap: { label: false } } });
 };
+
 
 module.exports = User;
