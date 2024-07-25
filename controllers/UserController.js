@@ -2,7 +2,7 @@ const User = require('../models/UserModels');
 const bcrypt = require('bcrypt');
 // const jwt = require("jsonwebtoken");
 const multer = require('multer');
-const path = require('path')
+const path = require('path');
 const { Op } = require('sequelize');
 // Login for user
 const UserLogin = async (req, res) => {

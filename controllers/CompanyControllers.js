@@ -41,6 +41,20 @@ const getCompanyData = async (req, res) => {
       res.status(500).json({ message: "Something went wrong while getting data", error: error.message });
     }
   };
+
+// getCompanyById
+const getCompanyById = async(req,res)=>{
+  const {id} = req.params;
+    try {
+      const getCompanyData = await Company.findByPk(id);
+      if(!getCompanyData){
+        res.status(404).json({message: "something went worng while"});
+      }
+     return res.status(201).json(getCompanyData);
+    } catch (error) {
+       res.status(404).json({message: "something went worng while",error});
+    }
+}
   //delete company
 
   const deleteCompany = async(req,res) =>{
@@ -57,4 +71,4 @@ const getCompanyData = async (req, res) => {
   }
   
 
-module.exports = { CreateCompany, getCompanyData,deleteCompany }
+module.exports = { CreateCompany, getCompanyData, getCompanyById, deleteCompany }
