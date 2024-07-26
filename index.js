@@ -13,17 +13,15 @@ const CompanyRoutes = require("./routes/CompanyRoutes");
 // Announcement uls
 const createAnnouncementRoutes =require("./routes/createAnnouncementRoutes");
 // const createAnnouncement = require('./controllers/createAnnouncementController.js');
-// sequelize.sync({alter: true}).then(() => {
-//   console.log('database connected successfully');
-// }).catch((error) => {
-//   console.error('Unable to connect to the database: ', error);
-// });
+const HelpCategoryRoutes = require('./routes/HelpCategoryRoutes');
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
 app.use('/company', CompanyRoutes)
 // announcement
 app.use('/announcement', createAnnouncementRoutes)
+// help category 
+app.use('/helpcategory',HelpCategoryRoutes)
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
