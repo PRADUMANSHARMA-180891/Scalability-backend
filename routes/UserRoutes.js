@@ -10,4 +10,6 @@ router.get('/getlogin',GetUserData);
 router.put('/updateuser/:Id',upload.single('user_photo'), updateUser);
 router.get('/search',SearchUsersByName);
 router.get('/search/:id',getUserById);
+
+
 module.exports = router

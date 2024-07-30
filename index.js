@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const multer = require('multer')
+const multer = require('multer');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -14,6 +14,8 @@ const CompanyRoutes = require("./routes/CompanyRoutes");
 const createAnnouncementRoutes =require("./routes/createAnnouncementRoutes");
 // const createAnnouncement = require('./controllers/createAnnouncementController.js');
 const HelpCategoryRoutes = require('./routes/HelpCategoryRoutes');
+const Period = require('./routes/Period');
+const Priority = require('./routes/PriorityRoutes');
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
@@ -21,7 +23,11 @@ app.use('/company', CompanyRoutes)
 // announcement
 app.use('/announcement', createAnnouncementRoutes)
 // help category 
-app.use('/helpcategory',HelpCategoryRoutes)
+app.use('/helpcategory',HelpCategoryRoutes);
+// period 
+app.use('/period', Period);
+// priority
+app.use('/priority', Priority);
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
