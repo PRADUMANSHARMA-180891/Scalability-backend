@@ -1,28 +1,6 @@
-
 const { Op } = require('sequelize');
 const Period = require('../models/period/CreatePeriod');
 
-// const createPeriod = async (req, res) => {
-
-
-//     try {
-//       const { start_date, end_date } = req.body;
-  
-//       // Validate the required fields
-//       if (!start_date) {
-//         return res.status(400).json({ message: 'Start date is required' });
-//       }
-  
-//       // Create the period
-//       const newPeriod = await Period.create({ start_date, end_date });
-  
-//       // Respond with the created period
-//       res.status(201).json({ message: 'Period created successfully', data: newPeriod });
-//     } catch (error) {
-//       console.error('Error:', error);
-//       res.status(500).json({ message: 'An error occurred while creating the period', error });
-//     }
-//   };
 const createPeriod = async (req, res) => {
   try {
     const periods = req.body.periods;
@@ -46,25 +24,9 @@ const createPeriod = async (req, res) => {
 
 
   // pagination 
-// const products = [
-//   { id: 1, start_date: "2024-07-01", end_date: "2025-01-01", },
-//   { id: 2, start_date: "2025-07-01", end_date: "2026-01-01", },
-//   { id: 3, start_date: "2026-07-01", end_date: "2027-01-01", }, 
-//   { id: 4, start_date: "2027-07-01", end_date: "2028-01-01",},
-//   { id: 5, start_date: "2028-07-01", end_date: "2025-01-01",},
-//   { id: 6, start_date: "2029-07-01", end_date: "2025-01-01", },
-//   { id: 7, start_date: "2020-07-01", end_date: "2025-01-01", },
-//   { id: 8, start_date: "2021-07-01", end_date: "2020-01-01",},
-//   { id: 9, start_date: "2022-07-01", end_date: "2029-01-01", },
-//   { id: 10, start_date: "2023-07-01", end_date: "2028-01-01", },
-//   { id: 11, start_date: "2024-07-01", end_date: "2027-01-01", },
-//   { id: 12, start_date: "2025-07-01", end_date: "2026-01-01",},
-//   // Add more products as needed
-// ];
-
 const getAdjacentPeriods = async(req, res) => {
-  const page = parseInt(req.query.page) ;
-    const pageSize = parseInt(req.query.pageSize) ;
+  const page = parseInt(req.query.page);
+  const pageSize = parseInt(req.query.pageSize);
 
     const startIndex = (page - 1) * pageSize;
     const endIndex = page * pageSize;

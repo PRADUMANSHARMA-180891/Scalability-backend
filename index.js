@@ -16,6 +16,8 @@ const createAnnouncementRoutes =require("./routes/createAnnouncementRoutes");
 const HelpCategoryRoutes = require('./routes/HelpCategoryRoutes');
 const Period = require('./routes/Period');
 const Priority = require('./routes/PriorityRoutes');
+const TaskRoutes  = require('./routes/TaskRoutes.js');
+const StuckRoutes  = require('./routes/StuckRoutes.js');
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
@@ -28,6 +30,10 @@ app.use('/helpcategory',HelpCategoryRoutes);
 app.use('/period', Period);
 // priority
 app.use('/priority', Priority);
+// task
+app.use('/task', TaskRoutes);
+// stuck
+app.use('/stuck', StuckRoutes);
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

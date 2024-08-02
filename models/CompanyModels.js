@@ -34,6 +34,7 @@ const Company = sequelize.define('company',{
         type : Datatypes.STRING,
         allowNull:false
     }
-})
+});
+
 
 module.exports = Company;
