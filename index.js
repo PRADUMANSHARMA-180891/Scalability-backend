@@ -18,6 +18,10 @@ const Period = require('./routes/Period');
 const Priority = require('./routes/PriorityRoutes');
 const TaskRoutes  = require('./routes/TaskRoutes.js');
 const StuckRoutes  = require('./routes/StuckRoutes.js');
+const HuddleRoutes  = require('./routes/HuddleRoutes.js');
+const SuggestionRoutes  = require('./routes/SuggestionRoutes.js');
+const MetricRoutes  = require('./routes/MetricRoutes.js');
+const SendInvitationRoutes =require('./routes/SendInvitationRoutes.js');
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
@@ -34,6 +38,14 @@ app.use('/priority', Priority);
 app.use('/task', TaskRoutes);
 // stuck
 app.use('/stuck', StuckRoutes);
+// huddle
+app.use('/huddle', HuddleRoutes);
+// suggestion
+app.use('/suggestion', SuggestionRoutes);
+// metric
+app.use('/metric', MetricRoutes);
+// invitation
+app.use('/invitation', SendInvitationRoutes);
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
