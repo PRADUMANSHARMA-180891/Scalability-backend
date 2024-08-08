@@ -18,12 +18,12 @@ const Task = sequelize.define('Task', {
     type: Datatypes.JSON, // Use JSON type for storing array of user IDs
     allowNull: true,
   },
-  priorityId: {
-    type: Datatypes.INTEGER,
+  priorityName: {
+    type: Datatypes.STRING,
     allowNull: true,
   },
-  huddleId: {
-    type: Datatypes.INTEGER,
+  huddleName: {
+    type: Datatypes.STRING,
     allowNull: true,
   },
   visibility: {

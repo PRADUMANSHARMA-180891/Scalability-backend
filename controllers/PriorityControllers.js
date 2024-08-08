@@ -1,3 +1,5 @@
+const { where } = require('sequelize');
+const { Op } = require('sequelize');
 const Period = require('../models/period/CreatePeriod');
 const Priority = require('../models/priority/PriorityModels'); // Adjust the path to your model
 const { createPeriod } = require('./PeriodControllers');
@@ -63,4 +65,31 @@ const getPriorityByDate = async (req, res) => {
   }
 };
 
-module.exports = { createPriority, getPriority, getPriorityByDate };
+// getPriorityByName
+// this controller will be using in task component
+const getPriorityByName = async(req,res)=>{
+  try {
+    const { priority_name } = req.query
+
+     if(!priority_name){
+         return res.status(404).json({message:"name parameter is require"})
+     }
+
+     const priorityName = await Priority.findAll({
+      where :{
+        priority_name :{
+          [Op.like]: `%${priority_name}%`,
+        }
+      }
+     });
+
+     if( priorityName.length == 0 ){
+       return res.status(404).json({message:"priorityName is not found"})
+     };
+
+    res.status(200).json(priorityName);
+  } catch (error) {
+    res.status(500).json({message:"something went wrong while searching name",error})
+  }
+}
+module.exports = { createPriority, getPriority, getPriorityByDate, getPriorityByName };

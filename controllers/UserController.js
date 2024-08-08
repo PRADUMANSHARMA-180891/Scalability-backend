@@ -53,6 +53,20 @@ const GetUserData = async (req, res) => {
     res.status(500).json({ message: 'Something went wrong while fetching user data', error });
   }
 };
+// get all user data
+const getAllUserData = async(req,res)=>{
+     try {
+         const getAllUser = await User.findAll({
+          attributes:['name','id']
+         });
+         if(!getAllUser){
+          res.status(404).json({message: "user not found"})
+         }
+         res.status(200).json(getAllUser);
+     } catch (error) {
+        res.status(400).json({message:"something went wrong while getting all user data",error})
+     }
+}
 //multer
 // Configure Multer storage options
 const storage = multer.diskStorage({
@@ -164,4 +178,4 @@ const getUserById = async (req, res) => {
   }
 };
 
-module.exports = { UserLogin, GetUserData, updateUser,upload, SearchUsersByName,getUserById };
+module.exports = { UserLogin, GetUserData,getAllUserData, updateUser,upload, SearchUsersByName,getUserById };

@@ -2,10 +2,6 @@ const sequelize = require('../../Config/DBs');
 const { DataTypes } = require('sequelize');
 
 const Huddle = sequelize.define('Huddle', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   owner: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -42,13 +38,13 @@ const Huddle = sequelize.define('Huddle', {
     type: DataTypes.JSON,
     allowNull: true,
   },
-  tags: {
-    type: DataTypes.JSON,
-    allowNull: true,
-  },
   huddleType: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  participants: {
+    type: DataTypes.JSON,
+    allowNull: true,
   },
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields
