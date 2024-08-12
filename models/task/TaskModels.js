@@ -31,6 +31,11 @@ const Task = sequelize.define('Task', {
     allowNull: true,
     defaultValue: 'Everyone', // default value
   },
+  participants: {
+    type: Datatypes.JSON,
+    allowNull: true,
+    // defaultValue: 'Everyone', // default value
+  },
   notes: {
     type: Datatypes.TEXT,
     allowNull: true,
