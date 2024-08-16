@@ -1,5 +1,7 @@
 const { where } = require("sequelize");
 const Company = require("../models/CompanyModels");
+const multer = require("multer");
+const path = require('path');
 
 const CreateCompany = async(req,res)=>{
     try {
@@ -17,6 +19,7 @@ const CreateCompany = async(req,res)=>{
             role,
             business_habit
         });
+        // const createCompanyData = await Company.create(req.body);
         if(!createCompanyData){
             res.status(404).json({message:"something went wrong while creating company"})
         }
@@ -55,8 +58,55 @@ const getCompanyById = async(req,res)=>{
        res.status(404).json({message: "something went worng while",error});
     }
 }
-  //delete company
 
+//multer
+// Configure Multer storage options
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Adding a timestamp to the file name to make it unique
+  },
+});
+
+// File filter to allow only image files
+const fileFilter = (req, file, cb) => {
+  const filetypes = /jpeg|jpg|png|gif/;
+  const mimetype = filetypes.test(file.mimetype);
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Only image files are allowed'));
+  }
+};
+
+// Initialize multer with the storage and file filter settings
+const upload = multer({ 
+  storage: storage, 
+  fileFilter: fileFilter 
+});
+// Update company
+const updateCompany = async (req, res) => {
+  try {
+    const {id} = req.params
+      const company = await Company.findByPk(id);
+      if (!company) {
+          return res.status(404).json({ message: "Company not found" });
+      }
+      if (req.file) {
+        company.profile_picture = req.file.path;
+      }
+      await company.update(req.body);
+      res.status(200).json(company);
+  } catch (error) {
+      res.status(500).json({ message: "Error updating company", error });
+  }
+};
+
+  //delete company
   const deleteCompany = async(req,res) =>{
     const { id } = req.params;
     try {
@@ -71,4 +121,4 @@ const getCompanyById = async(req,res)=>{
   }
   
 
-module.exports = { CreateCompany, getCompanyData, getCompanyById, deleteCompany }
+module.exports = { CreateCompany, getCompanyData, getCompanyById, deleteCompany,upload, updateCompany }

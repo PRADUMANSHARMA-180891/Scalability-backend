@@ -22,6 +22,7 @@ const HuddleRoutes  = require('./routes/HuddleRoutes.js');
 const SuggestionRoutes  = require('./routes/SuggestionRoutes.js');
 const MetricRoutes  = require('./routes/MetricRoutes.js');
 const SendInvitationRoutes =require('./routes/SendInvitationRoutes.js');
+const kpiListingRoutes = require('./routes/KpiListingRoutes.js')
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
@@ -46,6 +47,8 @@ app.use('/suggestion', SuggestionRoutes);
 app.use('/metric', MetricRoutes);
 // invitation
 app.use('/invitation', SendInvitationRoutes);
+// 
+app.use('/kpi', kpiListingRoutes);
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
