@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { UserLogin,GetUserData, updateUser, upload, SearchUsersByName, getUserById, getAllUserData } = require("../controllers/UserController");
+const { UserLogin,GetUserData, updateUser, upload, SearchUsersByName, getUserById, getAllUserData, DeleteUser } = require("../controllers/UserController");
 const VerifyToken = require('../middleware/AuthMiddleware');
 
 //
@@ -11,6 +11,7 @@ router.get('/getalluser', getAllUserData);
 router.put('/updateuser/:Id',upload.single('user_photo'), updateUser);
 router.get('/search',SearchUsersByName);
 router.get('/search/:id',getUserById);
+router.delete('/delete/:id',DeleteUser);
 
 
 module.exports = router

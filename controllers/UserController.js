@@ -57,7 +57,7 @@ const GetUserData = async (req, res) => {
 const getAllUserData = async(req,res)=>{
      try {
          const getAllUser = await User.findAll({
-          attributes:['name','id']
+          attributes:['name','email','user_roles','created_at','id']
          });
          if(!getAllUser){
           res.status(404).json({message: "user not found"})
@@ -177,5 +177,22 @@ const getUserById = async (req, res) => {
     res.status(500).json({ message: 'Something went wrong while fetching user data', error });
   }
 };
-
-module.exports = { UserLogin, GetUserData,getAllUserData, updateUser,upload, SearchUsersByName,getUserById };
+// delete user
+const DeleteUser = async(req,res)=>{
+  try {
+      const { id } = req.params;
+  
+      const user = await User.findByPk(id);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'user not found' });
+      }
+  
+      await user.destroy();
+  
+      res.status(204).json({ message: 'user deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete user' });
+    }
+}
+module.exports = { UserLogin, GetUserData,getAllUserData, updateUser,upload, SearchUsersByName,getUserById, DeleteUser };
