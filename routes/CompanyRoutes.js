@@ -9,4 +9,4 @@ router.get("/getcompanybById/:id", getCompanyById);
 router.put("/update/:id",upload.single('profile_picture'), updateCompany);
 router.delete('/deletecompany/:id',deleteCompany);
 
-module.exports =router;
+module.exports = router;

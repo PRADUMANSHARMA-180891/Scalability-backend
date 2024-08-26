@@ -4,6 +4,10 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
 const { Op } = require('sequelize');
+const jwt = require('jsonwebtoken');
+const  transporter  = require('../utils/ResetPassword');
+// const crypto = require('crypto');
+
 // Login for user
 const UserLogin = async (req, res) => {
   try {
@@ -34,7 +38,41 @@ const UserLogin = async (req, res) => {
     return res.status(404).json(error);
 }
 };
+const createNewUser = async (req, res) => {
+  const { firstName, lastName, title, role, department, user_Password, email, token } = req.body;
 
+  try {
+      // Validate the token if necessary (this part depends on your use case)
+      // For example, you might look up an invitation record by this token
+
+      // Check if the user already exists by email
+      let user = await User.findOne({ where: { email } });
+
+      if (user) {
+          return res.status(400).json({ message: 'A user with this email already exists.' });
+      }
+
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(user_Password, 10);
+
+      // Create the new user
+      user = await User.create({
+          name: `${firstName} ${lastName}`,
+          email,
+          user_password: hashedPassword,
+          position: title || null,
+          user_roles: role || null,
+          department: department || null,
+          // resetPasswordToken: null, // Clear the token if it's being used for validation
+          is_verified: true, // Mark the user as verified since they accepted the invite
+      });
+
+      res.status(201).json({ message: 'User created and invitation accepted successfully.' });
+  } catch (error) {
+      console.error('Error creating user:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 // Get user data
 const GetUserData = async (req, res) => {
   try {
@@ -195,4 +233,88 @@ const DeleteUser = async(req,res)=>{
       res.status(500).json({ error: 'Failed to delete user' });
     }
 }
-module.exports = { UserLogin, GetUserData,getAllUserData, updateUser,upload, SearchUsersByName,getUserById, DeleteUser };
+
+// reset password
+// const sendResetPasswordEmail = async (req, res) => {
+//   const { email } = req.body;
+
+//   try {
+//     const user = await User.findOne({ where: { email } });
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     const token = jwt.sign({ id: user.id }, 'your-secret-key', { expiresIn: '1h' });
+
+//     const resetLink = `http://localhost:3000/reset-password/${token}`;
+
+//     const mailOptions = {
+//       from: 'growthh.in@gmail.com',
+//       to: user.email,
+//       subject: 'Password Reset',
+//       html: `
+//                 <p>You requested a password reset. Click the link to reset your password: <a href="${resetLink}">${resetLink}</a></p>
+//             `,
+//     };
+
+//     await transporter.sendMail(mailOptions);
+
+//     res.status(200).json({ message: 'Password reset email sent!' });
+//   } catch (error) {
+//     console.error('Error occurred:', error); // Log the error
+//     res.status(500).json({ message: 'Something went wrong', error });
+//   }
+// };
+
+const sendResetPasswordEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      // const resetToken = crypto.randomBytes(32).toString('hex');
+      const resetToken = jwt.sign({ id: user.id }, 'your-secret-key', { expiresIn: '1h' });
+      user.remember_token = resetToken;
+      await user.save();
+
+      const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
+      
+      await transporter.sendMail({
+          to: user.email,
+          subject: 'Password Reset',
+          html: `
+              <p>You requested a password reset. Click the link to reset your password: <a href="${resetLink}">${resetLink}</a></p>
+          `,
+      });
+
+      res.status(200).json({ message: 'Password reset email sent' });
+  } catch (error) {
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { password, token } = req.body;
+  // const { token } = req.params;
+  try {
+      const user = await User.findOne({ where: { remember_token: token } });
+      if (!user) {
+          return res.status(400).json({ message: 'Invalid or expired token' });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.user_password = hashedPassword;
+      user.remember_token = null; // Clear the reset token
+      await user.save();
+
+      res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+module.exports = { UserLogin, GetUserData, getAllUserData, updateUser, upload, SearchUsersByName,getUserById, DeleteUser, sendResetPasswordEmail, resetPassword, createNewUser };

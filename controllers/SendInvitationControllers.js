@@ -65,6 +65,32 @@ const acceptInvitation = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
-
-
-module.exports= {createInvite, acceptInvitation}
+// get all invitation
+const getAllInvitation = async(req,res) =>{
+  try {
+    const Invitaion = await UserInvite.findAll({});
+    res.status(200).json(Invitaion);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve Invitation data' });
+  }
+}
+// delete invitation
+// delete user
+const DeleteInvitation = async(req,res)=>{
+  try {
+      const { id } = req.params;
+  
+      const user = await UserInvite.findByPk(id);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'user not found' });
+      }
+  
+      await user.destroy();
+  
+      res.status(204).json({ message: 'user deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete user' });
+    }
+}
+module.exports= {createInvite, acceptInvitation, getAllInvitation, DeleteInvitation}
