@@ -2,6 +2,7 @@ const { where } = require("sequelize");
 const Company = require("../models/CompanyModels");
 const multer = require("multer");
 const path = require('path');
+const User = require("../models/UserModels");
 
 const CreateCompany = async(req,res)=>{
     try {
@@ -45,18 +46,61 @@ const getCompanyData = async (req, res) => {
     }
   };
 
-// getCompanyById
-const getCompanyById = async(req,res)=>{
-  const {id} = req.params;
+  // report generation for company and user
+  const getDataForReport = async (req, res) => {
     try {
-      const getCompanyData = await Company.findByPk(id);
-      if(!getCompanyData){
-        res.status(404).json({message: "something went worng while"});
+      const companyReport = await Company.findAll({
+        include: [{
+          model: User,
+          as: 'users', // Ensure this alias matches the one in your association
+          attributes: ['id', 'name', 'email', 'position'] // Specify which user fields you want to include
+        }]
+      });
+  
+      if (companyReport.length === 0) {
+        return res.status(404).json({ message: "No companies found" });
       }
-     return res.status(201).json(getCompanyData);
+  
+      return res.status(200).json(companyReport);
     } catch (error) {
-       res.status(404).json({message: "something went worng while",error});
+      return res.status(500).json({ message: "An error occurred while fetching report data", error });
     }
+  };
+
+// getCompanyById
+// const getCompanyById = async(req,res)=>{
+//   const {id} = req.params;
+//     try {
+//       const getCompanyData = await Company.findByPk(id);
+//       if(!getCompanyData){
+//         res.status(404).json({message: "something went worng while"});
+//       }
+//      return res.status(201).json(getCompanyData);
+//     } catch (error) {
+//        res.status(404).json({message: "something went worng while",error});
+//     }
+// }
+
+const getCompanyById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const getCompanyData = await Company.findByPk(id, {
+      include: [{
+        model: User,
+        as: 'users', // Make sure this matches the alias used in the association
+        attributes: ['id', 'name', 'email', 'position'] // Specify which user fields you want to include
+      }]
+    });
+
+    if (!getCompanyData) {
+      return res.status(404).json({ message: "Company not found" });
+    }
+
+    return res.status(200).json(getCompanyData);
+  } catch (error) {
+    return res.status(500).json({ message: "An error occurred", error });
+  }
 }
 
 //multer
@@ -121,4 +165,4 @@ const updateCompany = async (req, res) => {
   }
   
 
-module.exports = { CreateCompany, getCompanyData, getCompanyById, deleteCompany,upload, updateCompany }
+module.exports = { CreateCompany, getCompanyData, getDataForReport, getCompanyById, deleteCompany,upload, updateCompany }

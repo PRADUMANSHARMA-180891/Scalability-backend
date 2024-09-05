@@ -6,6 +6,7 @@ const path = require('path');
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const  transporter  = require('../utils/ResetPassword');
+const Company = require('../models/CompanyModels');
 // const crypto = require('crypto');
 
 // Login for user
@@ -316,5 +317,8 @@ const resetPassword = async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+Company.hasMany(User, { foreignKey: 'companyId', as: 'users' });
+User.belongsTo(Company, { foreignKey: 'companyId' });
 
 module.exports = { UserLogin, GetUserData, getAllUserData, updateUser, upload, SearchUsersByName,getUserById, DeleteUser, sendResetPasswordEmail, resetPassword, createNewUser };

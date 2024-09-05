@@ -24,6 +24,7 @@ const MetricRoutes  = require('./routes/MetricRoutes.js');
 const SendInvitationRoutes =require('./routes/SendInvitationRoutes.js');
 const kpiListingRoutes = require('./routes/KpiListingRoutes.js')
 const CompanySettingsRoutes = require('./routes/CompanySettingsRoutes.js');
+const SurveyRoutes = require('./routes/SurveyRoutes.js');
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
@@ -52,6 +53,8 @@ app.use('/invitation', SendInvitationRoutes);
 app.use('/kpi', kpiListingRoutes);
 // company Settings
 app.use('/tag', CompanySettingsRoutes);
+// Survey 
+app.use('/survey', SurveyRoutes);
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

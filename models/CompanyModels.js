@@ -2,6 +2,12 @@ const sequelize = require('../Config/DBs');
 const Datatypes = require('sequelize');
 
 const Company = sequelize.define('company', {
+    id: {
+        type: Datatypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false, 
+    },
     company_name: {
         type: Datatypes.STRING,
         allowNull: false

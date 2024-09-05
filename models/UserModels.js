@@ -3,6 +3,7 @@ const Datatypes = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
+const Company = require('./CompanyModels');
 // const Announcement = require('./createAnnouncementModels');
 
 const User = sequelize.define(
@@ -163,7 +164,16 @@ const User = sequelize.define(
           weeklyAlert: {
             type: Datatypes.BOOLEAN,
             defaultValue: false,
-          }
+          },
+          companyId: {
+            type: Datatypes.INTEGER,
+            references: {
+                model: 'companies', // This should match the table name of the Company model
+                key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+        },
     },
     {
         tableName: 'users',
@@ -196,5 +206,7 @@ User.LoginUser = (user) => {
     return userSchema.validateAsync(user, { abortEarly: false, errors: { label: 'key', wrap: { label: false } } });
 };
 
+Company.hasMany(User, { foreignKey: 'companyId' });
+User.belongsTo(Company, { foreignKey: 'companyId' });
 
 module.exports = User;

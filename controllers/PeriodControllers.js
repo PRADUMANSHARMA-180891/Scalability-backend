@@ -49,4 +49,4 @@ const getAdjacentPeriods = async(req, res) => {
       }
   }
   
-  module.exports = {createPeriod, getAdjacentPeriods,getAllPeriod} ;
+  module.exports = {createPeriod, getAdjacentPeriods, getAllPeriod} ;

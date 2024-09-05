@@ -11,7 +11,7 @@ router.get('/getlogin', GetUserData);
 router.get('/getalluser', getAllUserData);
 router.put('/updateuser/:Id',upload.single('user_photo'), updateUser);
 router.get('/search', SearchUsersByName);
-router.get('/search/:id',getUserById);
+router.get('/search/:id', getUserById);
 router.delete('/delete/:id', DeleteUser);
 router.post('/resetpassword', sendResetPasswordEmail);
 router.post('/reset', resetPassword);
