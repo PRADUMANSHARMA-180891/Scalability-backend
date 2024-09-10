@@ -1,6 +1,6 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const multer = require('multer');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +25,9 @@ const SendInvitationRoutes =require('./routes/SendInvitationRoutes.js');
 const kpiListingRoutes = require('./routes/KpiListingRoutes.js')
 const CompanySettingsRoutes = require('./routes/CompanySettingsRoutes.js');
 const SurveyRoutes = require('./routes/SurveyRoutes.js');
+
+// const x =require("./seeders/20240816100628-seeders.js")
+
 //user Routes
 app.use('/user', UserRoutes);
 //company routes
@@ -56,7 +59,7 @@ app.use('/tag', CompanySettingsRoutes);
 // Survey 
 app.use('/survey', SurveyRoutes);
 // Start server
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

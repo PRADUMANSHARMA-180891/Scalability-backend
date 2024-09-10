@@ -127,5 +127,4 @@ const createSurveyAndQuestion = async (req, res) => {
 
 // get data of survey
 
-
 module.exports = {createSurvey, createQuestion, createSurveyAndQuestion}
