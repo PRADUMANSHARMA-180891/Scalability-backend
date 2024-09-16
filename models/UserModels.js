@@ -9,6 +9,11 @@ const Company = require('./CompanyModels');
 const User = sequelize.define(
     'User',
     {
+        id: {
+            type: Datatypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+          },
         name: {
             type: Datatypes.STRING,
             allowNull: true,
@@ -174,6 +179,7 @@ const User = sequelize.define(
             onUpdate: 'CASCADE',
             onDelete: 'SET NULL',
         },
+
     },
     {
         tableName: 'users',

@@ -1,5 +1,6 @@
 const sequelize = require('../../Config/DBs');
 const DataTypes = require('sequelize');
+const User = require('../UserModels');
 
 const Survey = sequelize.define('Survey', {
   id: {
@@ -26,7 +27,7 @@ const Survey = sequelize.define('Survey', {
   },
   sendSurveyOn: {
     type: DataTypes.DATE,
-    allowNull: true, 
+    allowNull: true,
   },
   closeSurveyAt: {
     type: DataTypes.DATE,
@@ -52,8 +53,26 @@ const Survey = sequelize.define('Survey', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.ENUM('open', 'closed'),
+    defaultValue: 'open',
+},
+  createdByUserId: {  // Add the foreign key here
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'users',  // Reference the 'users' table
+      key: 'id',       // Reference the primary key in the User model
+    },
+    allowNull: false,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  }
 }, {
   timestamps: true,
 });
+
+// Associations
+Survey.belongsTo(User, { foreignKey: 'createdByUserId' });
+User.hasMany(Survey, { foreignKey: 'createdByUserId' });
 
 module.exports = Survey;
