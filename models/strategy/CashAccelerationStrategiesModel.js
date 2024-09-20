@@ -2,7 +2,8 @@ const sequelize = require('../../Config/DBs');
 const { DataTypes } = require('sequelize');
 const Company = require('../CompanyModels');
 
-const ProccessAccountability = sequelize.define('ProccessAccountability', {
+
+const CashAcceleration  = sequelize.define('CashAcceleration', {
     companyId: {
         type: DataTypes.INTEGER,
         references: {
@@ -11,15 +12,19 @@ const ProccessAccountability = sequelize.define('ProccessAccountability', {
         },
         allowNull: false
     },
-    processName: {
+    SalesCycle: {
         type: DataTypes.JSON,
         allowNull: false
     },
-    personAccountable: {
+    ProductionInventoryCycle: {
         type: DataTypes.JSON,
         allowNull: false
     },
-    kpis: {
+    DeliveryCycle: {
+        type: DataTypes.JSON,
+        allowNull: false
+    },
+    BillingPaymentCycle: {
         type: DataTypes.JSON,
         allowNull: false
     }
@@ -28,7 +33,7 @@ const ProccessAccountability = sequelize.define('ProccessAccountability', {
 });
 
 // Associations
-Company.hasMany(ProccessAccountability, { foreignKey: 'companyId'  });
-ProccessAccountability.belongsTo(Company, { foreignKey: 'companyId' });
+Company.hasMany(CashAcceleration, { foreignKey: 'companyId'  });
+CashAcceleration.belongsTo(Company, { foreignKey: 'companyId' });
 
-module.exports = ProccessAccountability;
+module.exports = CashAcceleration;
