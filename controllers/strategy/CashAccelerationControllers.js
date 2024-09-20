@@ -36,4 +36,23 @@ const createCashAcceleration = async(req,res)=>{
     }
 } 
 
-module.exports= { createCashAcceleration }
+const fetchCashAcceleration =  async(req,res)=>{
+    try {
+        const {companyId} = req.params;        
+        // Fetch process accountability data from the database
+        const CashAccelerationdata = await CashAcceleration.findOne({
+            where: { companyId },
+        });
+
+        if (!CashAccelerationdata) {
+            return res.status(404).json({ message: 'Process Accountability data not found' });
+        }
+
+        res.json(CashAccelerationdata);
+    } catch (error) {
+        console.error('Error fetching process accountability:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+module.exports= { createCashAcceleration, fetchCashAcceleration }
