@@ -27,7 +27,7 @@ const CompanySettingsRoutes = require('./routes/CompanySettingsRoutes.js');
 const SurveyRoutes = require('./routes/SurveyRoutes.js');
 const EnpsRoutes = require('./routes/EnpsRoutes.js');
 const StrategyRoutes = require('./routes/StrategyRoutes.js');
-
+const OnePageStrategyRoutes = require('./routes/OnePageStrategyRoutes.js');
 // const x =require("./seeders/20240816100628-seeders.js")
 
 //user Routes
@@ -64,6 +64,8 @@ app.use('/survey', SurveyRoutes);
 app.use('/enps', EnpsRoutes);
 // startegy
 app.use('/strategy', StrategyRoutes);
+// one page strategy plan
+app.use('/strategy', OnePageStrategyRoutes);
 // Start server
 
 const PORT = process.env.PORT; 
