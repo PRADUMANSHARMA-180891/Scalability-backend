@@ -3,6 +3,7 @@ const { createFoundation, fetchFoundation, removeItem } = require('../controller
 const { createSupport, fetchSupport,  removeSupportItem } = require('../controllers/strategy/SupportControllers');
 const { createTheme, fetchTheme } = require('../controllers/strategy/ThemeControllers');
 const { createThreeToFive1, fetchThreetoFiveYearsPlan, removeThreeYearPlan } = require('../controllers/strategy/ThreeToFiveControllers1');
+const { createThreeToFive2, fetchThreetoFiveYearsPlan2, removeThreeYearPlan2 } = require('../controllers/strategy/ThreeToFiveControllers2');
 
 const router = express.Router();
 
@@ -21,6 +22,9 @@ router.get('/theme/get/:companyId', fetchTheme);
 router.post('/threetofive/create', createThreeToFive1);
 router.get('/threetofive/get/:companyId', fetchThreetoFiveYearsPlan);
 router.delete('/threetofive/remove/:companyId/:ThreeyearplanField/:id', removeThreeYearPlan);
-
+// Three to Five Years Plan section 2
+router.post('/fiveyearplan/create', createThreeToFive2);
+router.get('/fiveyearplan/get/:companyId', fetchThreetoFiveYearsPlan2);
+router.delete('/fiveyearplan/remove/:companyId/:ThreeyearplanField/:id', removeThreeYearPlan2);
 
 module.exports = router;
