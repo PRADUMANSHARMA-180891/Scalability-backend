@@ -2,7 +2,7 @@ const sequelize = require('../../Config/DBs');
 const DataTypes = require('sequelize');
 const User = require('../UserModels');
 
-const Survey = sequelize.define('Survey', {
+const Enps = sequelize.define('Enps', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,18 +17,12 @@ const Survey = sequelize.define('Survey', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-  anonymous: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
+
   scheduledDelivery: {
     type: DataTypes.DATE,
     allowNull: true,
   },
-  sendSurveyOn: {
-    type: DataTypes.DATE,
-    allowNull: true,
-  },
+
   closeSurveyAt: {
     type: DataTypes.DATE,
     allowNull: true,
@@ -57,6 +51,16 @@ const Survey = sequelize.define('Survey', {
     type: DataTypes.ENUM('open', 'closed'),
     defaultValue: 'open',
 },
+recipientsCount:{
+     type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+},
+respondedCount:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+},
   createdByUserId: {  // Add the foreign key here
     type: DataTypes.INTEGER,
     references: {
@@ -72,7 +76,7 @@ const Survey = sequelize.define('Survey', {
 });
 
 // Associations
-Survey.belongsTo(User, { foreignKey: 'createdByUserId' });
-User.hasMany(Survey, { foreignKey: 'createdByUserId' });
+Enps.belongsTo(User, { foreignKey: 'createdByUserId' });
+User.hasMany(Enps, { foreignKey: 'createdByUserId' });
 
-module.exports = Survey;
+module.exports = Enps;

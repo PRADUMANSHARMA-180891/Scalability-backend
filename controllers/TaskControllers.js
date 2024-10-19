@@ -38,10 +38,65 @@ const GetTasksByUpdatedAtRange = async (req, res) => {
   }
 };
 
-// module.exports = GetTasksByUpdatedAtRange;
+const getTask = async(req,res)=>{
+ 
+  try {
+    const taskData = await Task.findAll();
 
+    if (!taskData || taskData.length === 0) {
+      return res.status(404).json({ message: "No task data found" });
+    }
 
+   return res.status(200).json(taskData);
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong while getting data", error: error.message });
+  }
+}
 
-// module.exports = GetTasksByDueDate;
+// Edit a task
+const EditTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { shortTaskName, dueDate, recurring,assignedTo,priorityName,huddleName,visibility,participants,notes } = req.body;
 
-module.exports = {CreateTask,GetTasksByUpdatedAtRange};
+    const task = await Task.findByPk(id);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    task.shortTaskName = shortTaskName || task.shortTaskName;
+    task.dueDate = dueDate || task.dueDate;
+    task.recurring = recurring || task.recurring;
+    task.assignedTo  = assignedTo || task.assignedTo;
+    task.priorityName = priorityName || task.priorityName;
+    task.huddleName = huddleName || task.huddleName;
+    task.visibility = visibility || task.visibility;
+    task.participants = participants || task.participants;
+    task.notes = notes || task.notes
+
+    await task.save();
+    res.status(200).json({ message: "Task updated successfully", task });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating task", error: error.message });
+  }
+};
+
+// Delete a task
+const DeleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const task = await Task.findByPk(id);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    await task.destroy();
+    res.status(200).json({ message: "Task deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting task", error: error.message });
+  }
+};
+module.exports = {CreateTask,GetTasksByUpdatedAtRange, getTask, EditTask, DeleteTask};

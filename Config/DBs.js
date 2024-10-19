@@ -1,6 +1,4 @@
 const Sequelize = require("sequelize");
-// const User = require("../models/UserModels");
-// const Announcement = require("../models/createAnnouncementModels");
 const sequelize = new Sequelize(
         "scalability",
         "root",

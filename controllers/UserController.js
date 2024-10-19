@@ -30,7 +30,7 @@ const UserLogin = async (req, res) => {
         //     where: {
         //         id: findUser.id
         //     }
-        // })
+        // }) 
         return res.status(200).json({ status: true, message: "Login  successfully", token: token, user: findUser });
     } else {
         return res.status(400).json({ status: false, errorMessage: "user does not exist" });
