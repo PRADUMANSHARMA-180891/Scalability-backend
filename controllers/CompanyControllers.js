@@ -88,8 +88,7 @@ const getCompanyById = async (req, res) => {
     const getCompanyData = await Company.findByPk(id, {
       include: [{
         model: User,
-        as: 'users', // Make sure this matches the alias used in the association
-        attributes: ['id', 'name', 'email', 'position'] // Specify which user fields you want to include
+        as: 'users',
       }]
     });
 

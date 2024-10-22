@@ -1,5 +1,5 @@
 const express = require('express');
-const { createSurvey, createQuestion, createSurveyAndQuestion, getSurveyData, resendSurveyEmails, getSurveyDataById, deleteSurvey, closeSurvey, reOpenSurvey, editSurveyAndQuestions } = require('../controllers/SurveyControllers');
+const { createSurvey, createQuestion, createSurveyAndQuestion, getSurveyData, resendSurveyEmails, getSurveyDataById, deleteSurvey, closeSurvey, reOpenSurvey, editSurveyAndQuestions, SurveyResponse } = require('../controllers/SurveyControllers');
 // const createSurvey = require('../controllers/SurveyControllers');
 
 const router = express.Router();
@@ -14,5 +14,6 @@ router.delete('/survey/:id', deleteSurvey);
 router.put('/survey/close/:id', closeSurvey);
 router.put('/survey/reopen/:id', reOpenSurvey);
 router.put('/editsurvey/:id', editSurveyAndQuestions);
+router.post('/create-response', SurveyResponse);
 
 module.exports = router;
