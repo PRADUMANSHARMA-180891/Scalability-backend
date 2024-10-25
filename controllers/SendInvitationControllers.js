@@ -25,6 +25,7 @@ const  createInvite = async (req, res) => {
 };
 
 const acceptInvitation = async (req, res) => {
+
     try {
       const { token } = req.params;
   
@@ -49,6 +50,7 @@ const acceptInvitation = async (req, res) => {
         name: 'New User', // Placeholder, you might want to gather the actual name
         user_password: await bcrypt.hash('defaultpassword', 10), // Generate a hashed password
         user_roles: invite.role,
+        // department
       };
        if(!userData){
         res.status(401).json({message: " user data  not found properly "})
@@ -65,6 +67,58 @@ const acceptInvitation = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
+
+// const acceptInvitation = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+//     const { fullName, title, role, department, password } = req.body;
+
+//     // Find the invitation by token
+//     const invite = await UserInvite.findOne({ where: { token } });
+
+//     if (!invite) {
+//       return res.status(404).json({ message: 'Invitation not found' });
+//     }
+
+//     if (invite.accepted) {
+//       return res.status(400).json({ message: 'Invitation already accepted' });
+//     }
+
+//     // Validate required fields
+//     if (!fullName || !password) {
+//       return res.status(400).json({ message: 'Full name and password are required' });
+//     }
+
+//     // Mark the invitation as accepted
+//     invite.accepted = true;
+//     await invite.save();
+
+//     // Hash the user's password
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // Gather user data from form
+//     const userData = {
+//       email: invite.email,
+//       name: fullName,
+//       user_password: hashedPassword,
+//       user_roles: role || invite.role, // Use the role from form or default to invite role
+//       department: department || null,  // Optional field
+//       // title: title || null,            // Optional field
+//     };
+
+//     // Create a new user account
+//     const newUser = await User.create(userData);
+
+//     if (!newUser) {
+//       return res.status(401).json({ message: 'Error creating user' });
+//     }
+
+//     res.json({ message: 'Invitation accepted and user account created', user: newUser });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
 // get all invitation
 const getAllInvitation = async(req,res) =>{
   try {

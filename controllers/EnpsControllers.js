@@ -3,7 +3,6 @@ const SurveyResponse = require("../models/enps/SurveyResponseModels");
 const User = require("../models/UserModels");
 const nodemailer = require('nodemailer');
 
-
 const createEnpsSurvey = async (req, res) => {
   try {
     const {
@@ -237,4 +236,4 @@ const reOpenEnpsSurvey = async(req,res)=>{
   }
  }
 
-  module.exports = {createEnpsSurvey, getAllSurveys, getSurveyById, deleteSurvey, closeEnpsSurvey, reOpenEnpsSurvey,EnpsSurveyResponse}
+  module.exports = {createEnpsSurvey, getAllSurveys, getSurveyById, deleteSurvey, closeEnpsSurvey, reOpenEnpsSurvey, EnpsSurveyResponse}

@@ -28,6 +28,7 @@ const SurveyRoutes = require('./routes/SurveyRoutes.js');
 const EnpsRoutes = require('./routes/EnpsRoutes.js');
 const StrategyRoutes = require('./routes/StrategyRoutes.js');
 const OnePageStrategyRoutes = require('./routes/OnePageStrategyRoutes.js');
+const CoachRoutes = require('./routes/CoachRoutes.js');
 // const x =require("./seeders/20240816100628-seeders.js")
 
 //user Routes
@@ -66,6 +67,10 @@ app.use('/enps', EnpsRoutes);
 app.use('/strategy', StrategyRoutes);
 // one page strategy plan
 app.use('/strategy', OnePageStrategyRoutes);
+// coach
+app.use('/coach', CoachRoutes);
+
+
 // Start server
 
 const PORT = process.env.PORT; 

@@ -57,6 +57,16 @@ const Survey = sequelize.define('Survey', {
     type: DataTypes.ENUM('open', 'closed'),
     defaultValue: 'open',
 },
+recipientsCount:{
+     type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+},
+respondedCount:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+},
   createdByUserId: {  // Add the foreign key here
     type: DataTypes.INTEGER,
     references: {

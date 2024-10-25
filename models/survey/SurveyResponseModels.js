@@ -1,9 +1,9 @@
 const sequelize = require('../../Config/DBs');
 const DataTypes = require('sequelize');
-const Enps = require('./EnpsModels');
 const User = require('../UserModels');
+const Survey = require('./SurveyModels');
 
-const SurveyResponse = sequelize.define('SurveyResponse', {
+const MySurveyResponse = sequelize.define('MySurveyResponse', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -13,7 +13,7 @@ const SurveyResponse = sequelize.define('SurveyResponse', {
   surveyId: {
     type: DataTypes.INTEGER,
     references: {
-      model: Enps,
+      model: "survey",
       key: 'id',
     },
     allowNull: false,
@@ -39,10 +39,10 @@ const SurveyResponse = sequelize.define('SurveyResponse', {
 });
 
 // Associations
-SurveyResponse.belongsTo(Enps, { foreignKey: 'surveyId' });
-Enps.hasMany(SurveyResponse, { foreignKey: 'surveyId' });
+MySurveyResponse.belongsTo(Survey, { foreignKey: 'surveyId' });
+Survey.hasMany(MySurveyResponse, { foreignKey: 'surveyId' });
 
-SurveyResponse.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(SurveyResponse, { foreignKey: 'userId' });
+MySurveyResponse.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(MySurveyResponse, { foreignKey: 'userId' });
 
-module.exports = SurveyResponse;
+module.exports = MySurveyResponse;
