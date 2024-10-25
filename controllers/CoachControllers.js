@@ -20,7 +20,7 @@ const  createInvite = async (req, res) => {
       await sendInviteEmail(email, token);
   
     //   res.status(201).json(invite);
-    res.status(201).json({ id: invite.id, email: invite.email });
+    res.status(201).json({ id: invite.id, email: invite.email, role:invite.role });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
