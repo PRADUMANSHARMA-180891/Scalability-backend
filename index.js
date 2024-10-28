@@ -29,6 +29,9 @@ const EnpsRoutes = require('./routes/EnpsRoutes.js');
 const StrategyRoutes = require('./routes/StrategyRoutes.js');
 const OnePageStrategyRoutes = require('./routes/OnePageStrategyRoutes.js');
 const CoachRoutes = require('./routes/CoachRoutes.js');
+const Share = require('./routes/ShareRoutes');
+const ContactUsRoutes = require('./routes/ContactUsRoutes.js')
+const PersonalPlanRoutes = require('./routes/OnePagePersonalPlanRoutes.js')
 // const x =require("./seeders/20240816100628-seeders.js")
 
 //user Routes
@@ -69,8 +72,12 @@ app.use('/strategy', StrategyRoutes);
 app.use('/strategy', OnePageStrategyRoutes);
 // coach
 app.use('/coach', CoachRoutes);
-
-
+// share 
+app.use('/share', Share);
+// contact us
+app.use('/contactus',ContactUsRoutes);
+// one page personal plan
+app.use('/personal-plan',PersonalPlanRoutes)
 // Start server
 
 const PORT = process.env.PORT; 
