@@ -1,6 +1,26 @@
 const { Op } = require('sequelize');
 const Period = require('../models/period/CreatePeriod');
 
+// const createPeriod = async (req, res) => {
+//   try {
+//     const periods = req.body.periods;
+
+//     // Validate the required fields for each period
+//     if (!Array.isArray(periods) || periods.some(p => !p.start_date || !p.end_date)) {
+//       return res.status(400).json({ message: 'Each period must have a start date and end date' });
+//     }
+
+//     // Create multiple periods
+//     const newPeriods = await Period.bulkCreate(periods);
+
+//     // Respond with the created periods
+//     res.status(201).json({ message: 'Periods created successfully', data: newPeriods });
+//   } catch (error) {
+//     console.error('Error:', error);
+//     res.status(500).json({ message: 'An error occurred while creating the periods', error });
+//   }
+// };
+
 const createPeriod = async (req, res) => {
   try {
     const periods = req.body.periods;
@@ -13,11 +33,50 @@ const createPeriod = async (req, res) => {
     // Create multiple periods
     const newPeriods = await Period.bulkCreate(periods);
 
-    // Respond with the created periods
-    res.status(201).json({ message: 'Periods created successfully', data: newPeriods });
+    // Retrieve the ID of the most recently created period
+    const recentPeriod = await Period.findOne({
+      order: [['createdAt', 'DESC']]
+    });
+
+    // Respond with the created periods and the most recent period ID
+    res.status(201).json({
+      message: 'Periods created successfully',
+      data: newPeriods,
+      recentPeriodId: recentPeriod ? recentPeriod.id : null
+    });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'An error occurred while creating the periods', error });
+  }
+};
+
+// update 
+const updatePeriod = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { start_date, end_date } = req.body;
+
+    // Validate the required fields
+    if (!start_date || !end_date) {
+      return res.status(400).json({ message: 'Start date and end date are required' });
+    }
+
+    // Find the period by ID
+    const period = await Period.findByPk(id);
+    if (!period) {
+      return res.status(404).json({ message: 'Period not found' });
+    }
+
+    // Update the period
+    period.start_date = start_date;
+    period.end_date = end_date;
+    await period.save();
+
+    // Respond with the updated period
+    res.status(200).json({ message: 'Period updated successfully', data: period });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'An error occurred while updating the period', error });
   }
 };
 
@@ -49,4 +108,4 @@ const getAdjacentPeriods = async(req, res) => {
       }
   }
   
-  module.exports = {createPeriod, getAdjacentPeriods, getAllPeriod} ;
+  module.exports = {createPeriod, getAdjacentPeriods, getAllPeriod, updatePeriod} ;

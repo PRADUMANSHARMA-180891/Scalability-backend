@@ -32,7 +32,8 @@ const CoachRoutes = require('./routes/CoachRoutes.js');
 const Share = require('./routes/ShareRoutes');
 const ContactUsRoutes = require('./routes/ContactUsRoutes.js')
 const PersonalPlanRoutes = require('./routes/OnePagePersonalPlanRoutes.js')
-// const x =require("./seeders/20240816100628-seeders.js")
+const OneYearActiveRoutes = require('./routes/OneYearActiveRoutes.js');
+const NintyDaysAction = require('./routes/NintyDaysActionRoutes.js');
 
 //user Routes
 app.use('/user', UserRoutes);
@@ -78,6 +79,11 @@ app.use('/share', Share);
 app.use('/contactus',ContactUsRoutes);
 // one page personal plan
 app.use('/personal-plan',PersonalPlanRoutes)
+// One Year Active
+app.use('/oneyearactive',OneYearActiveRoutes)
+// ninty days Action
+app.use('/nintydaysaction', NintyDaysAction)
+
 // Start server
 
 const PORT = process.env.PORT; 
